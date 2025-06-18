@@ -1,8 +1,10 @@
 use wolfu::coreutils::echo::Echo;
+use wolfu::coreutils::cat::Cat;
 use wolfu::register_commands;
 fn main() {
     let commands = register_commands! {
         "echo" => Echo,
+        "cat" => Cat
     };
 
     let args: Vec<String> = std::env::args().collect();
