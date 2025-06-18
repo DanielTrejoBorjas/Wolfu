@@ -1,19 +1,20 @@
-use std::io::{self, Write};
-use crate::coreutils::command::Command;
+use crate::coreutils::command::{Command, ExitResult};
+use std::{
+    io::{self, Write},
+};
 
 pub struct Echo;
 
 // Implements the Command trait for the Echo command
 // This command prints its arguments to standard output, with an option to suppress the trailing newline.
 impl Command for Echo {
-    
     // Returns the name of the command
     // This is used to register the command and identify it in the command map.
     fn name(&self) -> &'static str {
         "echo"
     }
 
-    fn run(&self, args: &[String]) -> Result<(), String> {
+    fn run(&self, args: &[String]) -> ExitResult {
         let mut args = args.to_vec();
         let mut no_newline = false;
 
@@ -26,11 +27,13 @@ impl Command for Echo {
 
         print!("{}", args.join(" "));
         if no_newline {
-            io::stdout().flush().map_err(|e| e.to_string())?;
+            if let Err(e) = io::stdout().flush() {
+                return ExitResult::Continue(Err(e.to_string()));
+            }
         } else {
             println!();
         }
-        Ok(())
+        ExitResult::Continue(Ok(()))
     }
 
     fn help(&self) -> &'static str {

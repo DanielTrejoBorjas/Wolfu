@@ -1,11 +1,11 @@
-use wolfu::coreutils::echo::Echo;
-use wolfu::coreutils::cat::Cat;
+use wolfu::coreutils::command::ExitResult;
 use wolfu::register_commands;
 fn main() {
     // Register commands
     let commands = register_commands! {
-        "echo" => Echo,
-        "cat" => Cat
+        "echo" => wolfu::coreutils::echo::Echo,
+        "cat" => wolfu::coreutils::cat::Cat,
+        "true" => wolfu::coreutils::true_::True,
     };
 
     // Get command-line arguments
@@ -17,10 +17,17 @@ fn main() {
         .to_string_lossy();
 
     if let Some(cmd) = commands.get(prog.as_ref()) {
-        if let Err(e) = cmd.run(&args[1..]) {
-            eprintln!("Error executing command '{}': {}", cmd.name(), e);
+        match cmd.run(&args[1..]) {
+            ExitResult::Exit(code) => std::process::exit(code),
+            ExitResult::Continue(result) => {
+                if let Err(e) = result {
+                    eprintln!("Error executing command '{}': {}", cmd.name(), e);
+                    std::process::exit(1);
+                }
+            }
         }
     } else {
         eprintln!("Unknown command: {}", prog);
+        std::process::exit(0);
     }
 }

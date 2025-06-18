@@ -1,4 +1,3 @@
-
 // base template for commands in the coreutils module
 // This trait defines the basic structure for commands in the coreutils module.
 pub trait Command {
@@ -8,7 +7,7 @@ pub trait Command {
 
     // Runs the command with the provided arguments
     // Returns Ok(()) on success or an error message on failure.
-    fn run(&self, args: &[String]) -> Result<(), String>;
+    fn run(&self, args: &[String]) -> ExitResult;
 
     // Returns a help message for the command
     // This is used to provide usage information when the command is invoked with a help flag or when the command is unknown.
@@ -16,4 +15,9 @@ pub trait Command {
     fn help(&self) -> &'static str {
         "No help available for this command."
     }
+}
+
+pub enum ExitResult {
+    Exit(i32),                    // end
+    Continue(Result<(), String>), // return value
 }
