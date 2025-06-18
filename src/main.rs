@@ -6,6 +6,7 @@ fn main() {
         "echo" => wolfu::coreutils::echo::Echo,
         "cat" => wolfu::coreutils::cat::Cat,
         "true" => wolfu::coreutils::true_::True,
+        "false" => wolfu::coreutils::false_::False,
     };
 
     // Get command-line arguments

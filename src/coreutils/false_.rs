@@ -1,14 +1,14 @@
 use crate::coreutils::command::{Command, ExitResult};
 
-pub struct True;
+pub struct False;
 
-impl Command for True {
+impl Command for False {
     fn name(&self) -> &'static str {
-        "true"
+        "false"
     }
 
     fn run(&self, _args: &[String]) -> ExitResult {
-        ExitResult::Exit(0) 
+        ExitResult::Exit(1) 
     }
 
     fn help(&self) -> &'static str {
