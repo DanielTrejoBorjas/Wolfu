@@ -11,7 +11,6 @@ impl Command for Cat {
 
     fn run(&self, args: &[String]) -> Result<(), String> {
         if args.is_empty() {
-            // Leer desde stdin
             let mut stdin = io::stdin();
             let mut buf = String::new();
             stdin.read_to_string(&mut buf).map_err(|e| e.to_string())?;

@@ -9,7 +9,6 @@ impl Command for Echo {
     
     // Returns the name of the command
     // This is used to register the command and identify it in the command map.
-    // In this case, the command is named "echo".
     fn name(&self) -> &'static str {
         "echo"
     }
