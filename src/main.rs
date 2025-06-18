@@ -1,21 +1,21 @@
-use std::env;
-use std::path::Path;
-use wolfu::coreutils::echo;
+use wolfu::coreutils::echo::Echo;
 use wolfu::register_commands;
-
 fn main() {
     let commands = register_commands! {
-        "echo" => echo::run
+        "echo" => Echo,
     };
 
-    let program_name = env::args().next().unwrap();
-    let prog = Path::new(&program_name)
+    let args: Vec<String> = std::env::args().collect();
+    let prog = std::path::Path::new(&args[0])
         .file_name()
         .unwrap()
         .to_string_lossy();
 
-    match commands.get(prog.as_ref()) {
-        Some(cmd) => cmd(),
-        None => eprintln!("Unknown command: {}", prog),
+    if let Some(cmd) = commands.get(prog.as_ref()) {
+        if let Err(e) = cmd.run(&args[1..]) {
+            eprintln!("Error executing command '{}': {}", cmd.name(), e);
+        }
+    } else {
+        eprintln!("Unknown command: {}", prog);
     }
 }
