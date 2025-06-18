@@ -8,12 +8,12 @@ pub fn run() {
     if let Some(first) = args.first() {
         if first == "-n" {
             no_newline = true;
-            args.remove(0); // Quitamos "-n"
+            args.remove(0); // remove "-n"
         }
     }
 
     print!("{}", args.join(" "));
-    
+
     if no_newline {
         io::stdout().flush().unwrap();
     } else {
